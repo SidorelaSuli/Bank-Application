@@ -26,6 +26,7 @@ void display_options();
 
 /* main program */
 int main(){
+
     char option;
     num_acc=0;
     while(1){
@@ -90,6 +91,11 @@ void Create_new_account(){
    printf("\nEnter the account number(1 to 10): ");
    scanf("%d", &acc_number);
   // assert(acc_number>=1 && acc_number<=10);
+  if(acc_number<1 || acc_number>10 ){
+    printf("\n\n\nError, please choose a number from 1 to 10 \n\n\n");
+    //break;
+  }
+  else {
    printf("\nEnter the account holder address : ");
    scanf("%s", &acc_holder_address);
 
@@ -115,7 +121,7 @@ void Create_new_account(){
    account[acc_number-1].available_balance);
 
    //num_acc++;
-
+}
 }
 
 // Displaying account informations
