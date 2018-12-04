@@ -2,7 +2,7 @@
 #include <conio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <assert.h>
 // Structure declaration
 struct acc_type{
      char bank_name[20];
@@ -14,22 +14,6 @@ struct acc_type{
 };
 struct acc_type account[20];
 
-/*
-     printf("The above structure can be declared using
-     typedef like below");
-
-     typedef struct acc_type
-     {
-        char bank_name[20];
-        char bank_branch[20];
-        char acc_holder_name[30];
-        int acc_number;
-        char acc_holder_address[100];
-        float available_balance;
-     }Acc_detail;
-
-     Acc_detail account[20];
-*/
 
 int num_acc;
 
@@ -94,7 +78,9 @@ void Create_new_account(){
    int acc_number;
    char acc_holder_address[100];
    float available_balance = 0;
-   fflush(stdin);
+   //fflush(stdin);
+
+
    printf("\nEnter the bank name              : ");
    scanf("%s", &bank_name);
    printf("\nEnter the bank branch            : ");
@@ -103,16 +89,15 @@ void Create_new_account(){
    scanf("%s", &acc_holder_name);
    printf("\nEnter the account number(1 to 10): ");
    scanf("%d", &acc_number);
+  // assert(acc_number>=1 && acc_number<=10);
    printf("\nEnter the account holder address : ");
    scanf("%s", &acc_holder_address);
 
    strcpy(account[acc_number-1].bank_name,bank_name);
    strcpy(account[acc_number-1].bank_branch,bank_branch);
-   strcpy(account[acc_number-1].acc_holder_name,
-   acc_holder_name);
+   strcpy(account[acc_number-1].acc_holder_name,acc_holder_name);
    account[acc_number-1].acc_number=acc_number;
-   strcpy(account[acc_number-1].acc_holder_address,
-   acc_holder_address);
+   strcpy(account[acc_number-1].acc_holder_address,acc_holder_address);
    account[acc_number-1].available_balance=available_balance;
 
    printf("\nAccount has been created successfully \n\n");
@@ -136,9 +121,9 @@ void Create_new_account(){
 // Displaying account informations
 
 void Account_information(){
-     register int num_acc = 0;
+      int num_acc = 0;
      //if (!strcmp(customer,account[count].name))
-     while(strlen(account[num_acc].bank_name)>0){
+     if(strlen(account[num_acc].bank_name)>0){
          printf("\nBank name                : %s \n" ,
          account[num_acc].bank_name);
          printf("Bank branch              : %s \n" ,
@@ -151,7 +136,7 @@ void Account_information(){
          account[num_acc].acc_holder_address);
          printf("Available balance        : %f \n\n" ,
          account[num_acc].available_balance);
-         num_acc++;
+
      }
 }
 
@@ -169,10 +154,8 @@ void Cash_Deposit(){
    scanf("%f",&add_money);
 
    while (acc_no=account[acc_no-1].acc_number){
-         account[acc_no-1].available_balance=
-         account[acc_no-1].available_balance+add_money;
-         printf("\nThe New balance for account %d is %f \n",
-         acc_no, account[acc_no-1].available_balance);
+         account[acc_no-1].available_balance=account[acc_no-1].available_balance+add_money;
+         printf("\nThe New balance for account %d is %f \n",acc_no, account[acc_no-1].available_balance);
          break;
    }
    acc_no++;
@@ -186,17 +169,26 @@ void Cash_withdrawl(){
 
    printf("Enter account number you want to withdraw money:");
    scanf("%d",&acc_no);
-   printf("\nThe current balance for account %d is %f \n",
-   acc_no, account[acc_no-1].available_balance);
-   printf("\nEnter money you want to withdraw from account ");
-   scanf("%f",&withdraw_money);
 
-   while (acc_no=account[acc_no-1].acc_number){
-         account[acc_no-1].available_balance=
-         account[acc_no-1].available_balance-withdraw_money;
-         printf("\nThe New balance for account %d is %f \n",
-         acc_no, account[acc_no-1].available_balance);
-         break;
+   if(account[acc_no-1].available_balance != 0){
+       printf("\nThe current balance for account %d is %f \n",acc_no, account[acc_no-1].available_balance);
+       printf("\nEnter money you want to withdraw from account ");
+       scanf("%f",&withdraw_money);
+
+        if(withdraw_money<=account[acc_no-1].available_balance){
+                while (acc_no=account[acc_no-1].acc_number){
+                    account[acc_no-1].available_balance=
+                    account[acc_no-1].available_balance-withdraw_money;
+                    printf("\nThe New balance for account %d is %f \n",
+                    acc_no, account[acc_no-1].available_balance);
+                    break;
+                    }
+               acc_no++;
+        }
+        else {printf("Amount too large");}
    }
-   acc_no++;
+   else
+   {
+       printf("\nPlease deposit money in your account\n");
+   }
 }
